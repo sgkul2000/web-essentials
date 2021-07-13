@@ -1,0 +1,70 @@
+{{define "index"}}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web Essentials</title>
+    <link rel="icon" type="image/x-icon" href="static/favicon.ico" />
+    <link
+      href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="//unpkg.com/@highlightjs/cdn-assets@11.1.0/styles/default.min.css"
+    />
+    <script src="//unpkg.com/@highlightjs/cdn-assets@11.1.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="/static/monokai.css" />
+  </head>
+  <body class="bg-gray-900 text-gray-100">
+    <section id="main" class="flex flex-col items-center justify-center">
+      <h1 id="title" class="text-center font-bold text-3xl mt-14 mb-10">
+        Web Essentials <small class="text-sm font-normal">By team NISB</small>
+      </h1>
+      <div id="card-wrapper" class="w-11/12 md:w-8/12 lg:w-6/12">
+        {{range $index, $response := .}}
+        <div
+          class="
+            card
+            text-left
+            border
+            rounded-lg
+            border-gray-400
+            px-8
+            py-4
+            w-full
+            my-10
+          "
+        >
+          <div class="header flex items-center justify-between flex-row">
+            <div class="name font-semi-bold">
+              {{Capitalize $response.username }}
+            </div>
+            <div class="time opacity-70">{{formatTime $response.created}}</div>
+          </div>
+          <pre
+            class="my-2"
+          ><code class="language-json">{{.Display}}</code></pre>
+        </div>
+        {{ end }}
+      </div>
+    </section>
+    <footer class="flex items-center justify-center my-10">
+      Made with 🧠 by team
+      <a
+        target="_blank"
+        href="https://www.nisb.in"
+        class="hover:underline text-blue-400 ml-1"
+      >
+        NISB</a
+      >
+    </footer>
+    <script>
+      hljs.highlightAll();
+    </script>
+  </body>
+</html>
+
+{{ end }}
