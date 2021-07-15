@@ -18,7 +18,7 @@
     <script src="//unpkg.com/@highlightjs/cdn-assets@11.1.0/highlight.min.js"></script>
     <link rel="stylesheet" href="/static/monokai.css" />
   </head>
-  <body class="bg-gray-900 text-gray-100">
+  <body class="text-gray-100" style="background-color: #052f66">
     <section id="main" class="flex flex-col items-center justify-center">
       <h1 id="title" class="text-center font-bold text-3xl mt-14 mb-10">
         Web Essentials <small class="text-sm font-normal">By team NISB</small>
@@ -26,17 +26,8 @@
       <div id="card-wrapper" class="w-11/12 md:w-8/12 lg:w-6/12">
         {{range $index, $response := .}}
         <div
-          class="
-            card
-            text-left
-            border
-            rounded-lg
-            border-gray-400
-            px-8
-            py-4
-            w-full
-            my-10
-          "
+          class="card text-left rounded-xl px-8 py-8 w-full my-10"
+          style="background-color: #272822"
         >
           <div class="header flex items-center justify-between flex-row">
             <div class="name font-semi-bold">

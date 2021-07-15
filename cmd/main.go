@@ -24,7 +24,8 @@ func main() {
 				return strings.Title(name)
 			},
 			"formatTime": func(t time.Time) string {
-				return t.Format("2 January, 17:00")
+				loc, _ := time.LoadLocation("Asia/Calcutta")
+				return t.In(loc).Format("2 January, 15:04")
 			},
 		}).ParseGlob("views/*.html")),
 	}
@@ -46,8 +47,7 @@ func main() {
 		sa := option.WithCredentialsFile("./cmd/creds.json")
 		app, err := firebase.NewApp(ctx, nil, sa)
 		if err != nil {
-			fmt.Println(err)
-			// return err
+			return err
 		}
 		client, err := app.Firestore(ctx)
 		if err != nil {
@@ -88,7 +88,47 @@ func main() {
 			},
 		}).ParseGlob("views/*.html"))
 		return temp.ExecuteTemplate(c.Response().Writer, "index", responses)
-		// return c.Render(http.StatusOK, "base", nil)
+		// return c.Render(http.StatusOK, "index", responses)
+	})
+
+	// route to get responses of a single user
+	e.GET("/:username", func(c echo.Context) error {
+		ctx := context.Background()
+		sa := option.WithCredentialsFile("./cmd/creds.json")
+		app, err := firebase.NewApp(ctx, nil, sa)
+		if err != nil {
+			return err
+		}
+		client, err := app.Firestore(ctx)
+		if err != nil {
+			return err
+		}
+		defer client.Close()
+
+		responses := []map[string]interface{}{}
+
+		iter := client.Collection("responses").Where("username", "==", c.Param("username")).Documents(ctx)
+		for {
+			doc, err := iter.Next()
+			if err == iterator.Done {
+				break
+			}
+			if err != nil {
+				log.Fatalf("Failed to iterate: %v", err)
+			}
+			responses = append(responses, doc.Data())
+		}
+
+		for _, response := range responses {
+			code := "{\n"
+			for k, v := range response {
+				code += fmt.Sprintf("\t\"%v\":\"%v\",\n", k, v)
+			}
+			code += "}"
+			response["Display"] = code
+		}
+
+		return c.Render(http.StatusOK, "index", responses)
 	})
 
 	// route to post responses
@@ -102,8 +142,8 @@ func main() {
 		sa := option.WithCredentialsFile("./cmd/creds.json")
 		app, err := firebase.NewApp(ctx, nil, sa)
 		if err != nil {
-			fmt.Println(err)
-			// return err
+			// fmt.Println(err)
+			return err
 		}
 		client, err := app.Firestore(ctx)
 		if err != nil {
