@@ -18,24 +18,11 @@
     <script src="//unpkg.com/@highlightjs/cdn-assets@11.1.0/highlight.min.js"></script>
     <link rel="stylesheet" href="/static/monokai.css" />
   </head>
-  <body class="text-gray-100 bg-indigo-900">
+  <body class="text-gray-100" style="background-color: #052f66">
     <section id="main" class="flex flex-col items-center justify-center">
-      <h1
-        id="title"
-        class="
-          text-yellow-100 text-center
-          font-bold
-          text-4xl
-          mt-14
-          mb-10
-          font-sans
-          tracking-wide
-        "
-      >
+      <h1 id="title" class="text-center font-bold text-3xl mt-14 mb-10">
         Web Development Essentials
-        <small class="text-sm text-white tracking-normal font-normal"
-          >By team NISB</small
-        >
+        <small class="text-sm font-normal">By team NISB</small>
       </h1>
       <div id="card-wrapper" class="w-11/12 md:w-8/12 lg:w-6/12">
         {{range $index, $response := .}}
@@ -44,9 +31,7 @@
           style="background-color: #272822"
         >
           <div class="header flex items-center justify-between flex-row">
-            <div
-              class="name text-gray-300 font-normal tracking-wider font-mono"
-            >
+            <div class="name font-semi-bold">
               {{Capitalize $response.username }}
             </div>
             <div class="time opacity-70">{{formatTime $response.created}}</div>

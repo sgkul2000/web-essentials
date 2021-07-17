@@ -1,4 +1,4 @@
-{{define "index"}}
+{{define "notFound"}}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -20,43 +20,26 @@
   </head>
   <body class="text-gray-100 bg-indigo-900">
     <section id="main" class="flex flex-col items-center justify-center">
-      <h1
-        id="title"
+      <h2
         class="
-          text-yellow-100 text-center
+          text-red-400 text-center
           font-bold
           text-4xl
-          mt-14
-          mb-10
+          mt-40
+          mb-4
           font-sans
           tracking-wide
         "
       >
-        Web Development Essentials
-        <small class="text-sm text-white tracking-normal font-normal"
-          >By team NISB</small
-        >
-      </h1>
-      <div id="card-wrapper" class="w-11/12 md:w-8/12 lg:w-6/12">
-        {{range $index, $response := .}}
-        <div
-          class="card text-left rounded-xl px-8 py-8 w-full my-10"
-          style="background-color: #272822"
-        >
-          <div class="header flex items-center justify-between flex-row">
-            <div
-              class="name text-gray-300 font-normal tracking-wider font-mono"
-            >
-              {{Capitalize $response.username }}
-            </div>
-            <div class="time opacity-70">{{formatTime $response.created}}</div>
-          </div>
-          <pre
-            class="my-2"
-          ><code class="language-json">{{.Display}}</code></pre>
-        </div>
-        {{ end }}
-      </div>
+        Oops!
+      </h2>
+      <h3 class="tracking-wide text-gray-100 text-xk mt-4 mb-10 font-sans">
+        {{ . }} Please head back to<a
+          class="ml-1 text-blue-400 hover:underline"
+          href="/"
+          >Home</a
+        >.
+      </h3>
     </section>
     <footer class="flex items-center justify-center my-10">
       Made with 🧠 by team

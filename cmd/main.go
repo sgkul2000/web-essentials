@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	"cloud.google.com/go/firestore"
 	firebase "firebase.google.com/go"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -57,7 +58,16 @@ func main() {
 
 		responses := []map[string]interface{}{}
 
-		iter := client.Collection("responses").Documents(ctx)
+		query := client.Collection("responses")
+		iter := query.Documents(ctx)
+		sli, err := iter.GetAll()
+		if err != nil {
+			return err
+		}
+		if len(sli) == 0 {
+			return c.Render(http.StatusOK, "notFound", "No Responses Found.")
+		}
+		iter = query.OrderBy("created", firestore.Desc).Documents(ctx)
 		for {
 			doc, err := iter.Next()
 			if err == iterator.Done {
@@ -78,17 +88,7 @@ func main() {
 			response["Display"] = code
 		}
 
-		temp := template.Must(template.New("Secondary").Funcs(template.FuncMap{
-			"Capitalize": func(name string) string {
-				return strings.Title(name)
-			},
-			"formatTime": func(t time.Time) string {
-				loc, _ := time.LoadLocation("Asia/Calcutta")
-				return t.In(loc).Format("2 January, 15:04")
-			},
-		}).ParseGlob("views/*.html"))
-		return temp.ExecuteTemplate(c.Response().Writer, "index", responses)
-		// return c.Render(http.StatusOK, "index", responses)
+		return c.Render(http.StatusOK, "index", responses)
 	})
 
 	// route to get responses of a single user
@@ -107,7 +107,17 @@ func main() {
 
 		responses := []map[string]interface{}{}
 
-		iter := client.Collection("responses").Where("username", "==", c.Param("username")).Documents(ctx)
+		query := client.Collection("responses").Where("username", "==", c.Param("username"))
+		iter := query.Documents(ctx)
+		sli, err := iter.GetAll()
+		if err != nil {
+			fmt.Println(err.Error())
+			return err
+		}
+		if len(sli) == 0 {
+			return c.Render(http.StatusOK, "notFound", "User not found.")
+		}
+		iter = query.OrderBy("created", firestore.Desc).Documents(ctx)
 		for {
 			doc, err := iter.Next()
 			if err == iterator.Done {
